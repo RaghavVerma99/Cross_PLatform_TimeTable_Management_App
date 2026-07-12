@@ -1,6 +1,6 @@
 # ⚡ TaskFlow — Developer & Deployment Manual
 
-TaskFlow is a production-grade, minimalist task management client compiled in **Flutter 3.x / Dart 3.x**. It implements **Riverpod** for declarative state, **Hive** for zero-latency local storage, and **Render** blueprint pipelines for static web hosting.
+TaskFlow is a production-grade, minimalist task management client compiled in **Flutter 3.x / Dart 3.x**. It implements **Riverpod** for declarative state, **Hive** for zero-latency local storage, and **Vercel** serverless pipelines for static web delivery.
 
 ---
 
@@ -12,7 +12,7 @@ TaskFlow is a production-grade, minimalist task management client compiled in **
 | **State** | `flutter_riverpod` | `^2.5.1` | Decoupled reactive view-models & filtering state |
 | **Database** | `hive_flutter` | `^1.1.0` | In-memory key-value/document store with disk sync |
 | **Utils** | `uuid` & `intl` | `^4.3.3` / `^0.19.0` | Unique ID generation & localized date presentation |
-| **CI/CD** | Render Static Sites | `Blueprints` | Automated Git-triggered cloud web builds |
+| **CI/CD** | Vercel Static hosting | `V2` | Automated Git-triggered cloud web builds |
 
 ---
 
@@ -55,12 +55,24 @@ flutter build apk --release      # Outputs optimized Android APK to build/app/ou
 flutter build appbundle --release # Outputs optimized AAB for Google Play Store upload
 ```
 
-### 🌐 Cloud Deployment (Render Static Site)
-This repository includes a Blueprint configuration for [Render](https://render.com) to build and host Flutter Web automatically.
+### 🌐 Vercel Cloud Pipeline Configuration
+Deployments are fully automated via `vercel.json` pointing to a customized runtime shell script.
 
-#### How to Deploy:
-1. Push this workspace folder to a remote repository on GitHub, GitLab, or Bitbucket.
-2. Log in to the [Render Dashboard](https://dashboard.render.com).
-3. Click **New +** and select **Blueprint**.
-4. Connect your Git repository.
-5. Render will automatically read [render.yaml](file:///C:/Users/rissh/OneDrive/Documents/AntiGravity/timetable_app/render.yaml), execute [build-render.sh](file:///C:/Users/rissh/OneDrive/Documents/AntiGravity/timetable_app/build-render.sh) to compile the client, and serve the output folder live!
+#### Configuration File: [vercel.json](file:///C:/Users/rissh/OneDrive/Documents/AntiGravity/timetable_app/vercel.json)
+Directs Vercel to route virtual paths to `index.html` (supporting routing) and overrides commands:
+```json
+{
+  "cleanUrls": true,
+  "buildCommand": "bash build-vercel.sh",
+  "outputDirectory": "build/web"
+}
+```
+
+#### Build Shell Script: [build-vercel.sh](file:///C:/Users/rissh/OneDrive/Documents/AntiGravity/timetable_app/build-vercel.sh)
+Executed by Vercel's build VM. You do not need to pre-configure or install Flutter on your dashboard:
+1. Clones the stable Flutter SDK (`--depth 1` shallow clone to speed up builds).
+2. Sets environment `$PATH` configuration.
+3. Automatically triggers template configuration (`flutter create .`).
+4. Compiles the static web bundle using the CanvasKit engine (`flutter build web --release --web-renderer canvaskit`).
+
+To deploy, push the workspace to your Git provider, connect Vercel, set the project's **Root Directory** to `timetable_app`, and click **Deploy**.

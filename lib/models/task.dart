@@ -20,10 +20,11 @@ class Task {
 
   // Create from Map for Hive deserialization
   factory Task.fromMap(Map<dynamic, dynamic> map) {
+    final rawCompleted = map['isCompleted'];
     return Task(
       id: map['id'] as String,
       title: map['title'] as String,
-      isCompleted: (map['isCompleted'] ?? 0) == 1,
+      isCompleted: rawCompleted == 1 || rawCompleted == true,
     );
   }
 

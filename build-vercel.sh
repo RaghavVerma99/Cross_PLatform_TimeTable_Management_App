@@ -4,10 +4,10 @@
 set -e
 
 echo "=========================================================="
-echo "🚀 STARTING FLUTTER WEB BUILD FOR RENDER"
+echo "🚀 STARTING FLUTTER WEB BUILD FOR VERCEL"
 echo "=========================================================="
 
-# 1. Clone Flutter stable branch with depth 1 to speed up build execution
+# 1. Clone Flutter stable branch with depth 1 to speed up builds
 if [ ! -d "flutter" ]; then
   echo "📦 Cloning Flutter SDK (stable)..."
   git clone https://github.com/flutter/flutter.git -b stable --depth 1 flutter

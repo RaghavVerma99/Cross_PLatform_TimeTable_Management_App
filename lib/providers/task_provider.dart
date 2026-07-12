@@ -29,19 +29,18 @@ final filteredTasksProvider = Provider<List<Task>>((ref) {
 });
 
 class TaskNotifier extends StateNotifier<List<Task>> {
-  late final Box _box;
+  final Box _box = Hive.box('tasks');
 
   TaskNotifier() : super([]) {
-    _box = Hive.box('tasks');
     _loadTasks();
   }
 
   void _loadTasks() {
     final List<Task> loaded = [];
     for (var key in _box.keys) {
-      final map = _box.get(key);
-      if (map is Map) {
-        loaded.add(Task.fromMap(map));
+      final value = _box.get(key);
+      if (value is Map) {
+        loaded.add(Task.fromMap(Map<dynamic, dynamic>.from(value)));
       }
     }
     state = loaded;

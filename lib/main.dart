@@ -34,7 +34,6 @@ class TaskFlowApp extends StatelessWidget {
           primary: Color(0xFFE94057),
           secondary: Color(0xFF8A2387),
           surface: Color(0xFF1E1E1E),
-          background: Color(0xFF121212),
           error: Colors.redAccent,
         ),
         textTheme: const TextTheme(
