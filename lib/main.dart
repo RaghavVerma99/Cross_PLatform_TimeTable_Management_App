@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'views/task_screen.dart';
+import 'views/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Initialize local Hive database for tasks
+  // Initialize local Hive database
   await Hive.initFlutter();
   await Hive.openBox('tasks');
+  await Hive.openBox('timetable');
   
   runApp(
     const ProviderScope(
@@ -46,7 +47,7 @@ class TaskFlowApp extends StatelessWidget {
           bodyMedium: TextStyle(color: Colors.white60),
         ),
       ),
-      home: const TaskScreen(),
+      home: const HomeScreen(),
     );
   }
 }
