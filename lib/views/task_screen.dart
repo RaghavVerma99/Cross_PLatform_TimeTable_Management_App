@@ -123,7 +123,7 @@ class TaskScreen extends ConsumerWidget {
                   ),
                   child: Text(
                     label,
-                    textAlign: Center,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       color: isSelected ? Colors.white : const Color(0xFFB0B0B0),
                       fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
@@ -179,7 +179,7 @@ class TaskScreen extends ConsumerWidget {
             const SizedBox(height: 16),
             Text(
               message,
-              textAlign: Center,
+              textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 15,
                 color: Color(0xFF8A8A8A),
