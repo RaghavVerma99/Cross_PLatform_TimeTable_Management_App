@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'views/timetable_screen.dart';
+import 'views/task_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Initialize local Hive database
+  // Initialize local Hive database for tasks
   await Hive.initFlutter();
-  await Hive.openBox('timetable_classes');
+  await Hive.openBox('tasks');
   
   runApp(
     const ProviderScope(
-      child: ChronosApp(),
+      child: TaskFlowApp(),
     ),
   );
 }
 
-class ChronosApp extends StatelessWidget {
-  const ChronosApp({Key? key}) : super(key: key);
+class TaskFlowApp extends StatelessWidget {
+  const TaskFlowApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Chronos Timetable',
+      title: 'TaskFlow',
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.dark,
       darkTheme: ThemeData(
@@ -46,25 +46,8 @@ class ChronosApp extends StatelessWidget {
           bodyLarge: TextStyle(color: Colors.white70),
           bodyMedium: TextStyle(color: Colors.white60),
         ),
-        timePickerTheme: TimePickerThemeData(
-          backgroundColor: const Color(0xFF1E1E1E),
-          dialBackgroundColor: const Color(0xFF121212),
-          dialHandColor: const Color(0xFFE94057),
-          dialTextColor: Colors.white,
-          entryModeIconColor: const Color(0xFFE94057),
-          hourMinuteColor: const Color(0xFF121212),
-          hourMinuteTextColor: Colors.white,
-          dayPeriodColor: const Color(0xFF121212),
-          dayPeriodTextColor: Colors.white,
-        ),
-        tooltipTheme: TooltipThemeData(
-          decoration: BoxDecoration(
-            color: const Color(0xFF2C2C2C),
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
       ),
-      home: const TimetableScreen(),
+      home: const TaskScreen(),
     );
   }
 }

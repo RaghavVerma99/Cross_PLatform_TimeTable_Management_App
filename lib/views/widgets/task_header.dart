@@ -1,50 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import '../../providers/timetable_provider.dart';
+import '../../providers/task_provider.dart';
 
-class ProgressHeader extends ConsumerWidget {
-  const ProgressHeader({Key? key}) : super(key: key);
+class TaskHeader extends ConsumerWidget {
+  const TaskHeader({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedDay = ref.watch(selectedDayProvider);
-    final allClasses = ref.watch(timetableProvider);
+    final tasks = ref.watch(taskProvider);
+    final total = tasks.length;
+    final completed = tasks.where((t) => t.isCompleted).length;
+    final progress = total == 0 ? 0.0 : completed / total;
+    
+    final dateStr = DateFormat('EEEE, MMM d').format(DateTime.now());
 
-    // Filter classes for selected day
-    final dayClasses = allClasses.where((c) => c.dayOfWeek == selectedDay).toList();
-    final totalClasses = dayClasses.length;
-    final completedClasses = dayClasses.where((c) => c.isCompleted).length;
-
-    // Calculate progress ratio
-    final double progress = totalClasses == 0 ? 0.0 : completedClasses / totalClasses;
-
-    // Current date format
-    final String formattedDate = DateFormat('EEEE, MMMM d').format(DateTime.now());
-
-    // Generate motivational message
-    String titleText;
-    String subText;
-    if (totalClasses == 0) {
-      titleText = 'No classes today!';
-      subText = 'Enjoy your free time, rest, and recharge. ☕';
-    } else if (completedClasses == 0) {
-      titleText = 'Ready to start?';
-      subText = 'You have $totalClasses schedule${totalClasses > 1 ? 's' : 'd'} today. Let\'s do this! 🚀';
-    } else if (completedClasses == totalClasses) {
-      titleText = 'All caught up!';
-      subText = 'You have completed all $totalClasses classes. Great work! 🎉';
+    String statsText;
+    if (total == 0) {
+      statsText = 'Create a task to get started! 🎯';
+    } else if (completed == total) {
+      statsText = 'Outstanding! All tasks completed. 🎉';
     } else {
-      titleText = 'Keep pushing!';
-      subText = 'Completed $completedClasses of $totalClasses classes today. 💪';
+      statsText = '$completed of $total tasks completed today. 💪';
     }
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
+      padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // App Title & Date
+          // App bar replacement
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -52,7 +37,7 @@ class ProgressHeader extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Chronos',
+                    'TaskFlow',
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
@@ -61,7 +46,7 @@ class ProgressHeader extends ConsumerWidget {
                     ),
                   ),
                   Text(
-                    'TIMETABLE PLANNER',
+                    'TASK MANAGER',
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w800,
@@ -79,7 +64,7 @@ class ProgressHeader extends ConsumerWidget {
                   border: Border.all(color: const Color(0xFF2E2E2E)),
                 ),
                 child: Text(
-                  formattedDate,
+                  dateStr,
                   style: const TextStyle(
                     fontSize: 12,
                     color: Color(0xFFD0D0D0),
@@ -89,28 +74,16 @@ class ProgressHeader extends ConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(height: 24),
-
-          // Progress Box
+          const SizedBox(height: 20),
+          
+          // Progress banner
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  const Color(0xFF1E1E1E),
-                  const Color(0xFF1E1E1E).withOpacity(0.8),
-                ],
-              ),
+              color: const Color(0xFF1E1E1E),
               borderRadius: BorderRadius.circular(24),
               border: Border.all(color: const Color(0xFF2C2C2C), width: 1.5),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,15 +91,15 @@ class ProgressHeader extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      titleText,
-                      style: const TextStyle(
+                    const Text(
+                      'Daily Progress',
+                      style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
-                    if (totalClasses > 0)
+                    if (total > 0)
                       Text(
                         '${(progress * 100).toInt()}%',
                         style: const TextStyle(
@@ -139,13 +112,13 @@ class ProgressHeader extends ConsumerWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  subText,
+                  statsText,
                   style: const TextStyle(
                     fontSize: 13,
                     color: Color(0xFFB0B0B0),
                   ),
                 ),
-                if (totalClasses > 0) ...[
+                if (total > 0) ...[
                   const SizedBox(height: 16),
                   Stack(
                     children: [
@@ -157,7 +130,7 @@ class ProgressHeader extends ConsumerWidget {
                         ),
                       ),
                       AnimatedContainer(
-                        duration: const Duration(milliseconds: 500),
+                        duration: const Duration(milliseconds: 400),
                         curve: Curves.easeOut,
                         height: 8,
                         width: (MediaQuery.of(context).size.width - 82) * progress,
@@ -168,7 +141,7 @@ class ProgressHeader extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(4),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFFE94057).withOpacity(0.5),
+                              color: const Color(0xFFE94057).withOpacity(0.4),
                               blurRadius: 6,
                               spreadRadius: 1,
                             ),
