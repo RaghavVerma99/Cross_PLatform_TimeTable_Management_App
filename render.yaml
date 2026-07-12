@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: taskflow-app
+    runtime: static
+    buildCommand: bash build-render.sh
+    staticPublishPath: ./build/web
