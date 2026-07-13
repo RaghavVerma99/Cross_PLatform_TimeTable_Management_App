@@ -39,7 +39,7 @@ flutter pub get
 
 # 7. Compile the application to static Web files
 echo "⚡ Building Flutter Web release bundle..."
-flutter build web --release --web-renderer canvaskit
+flutter build web --release
 
 echo "=========================================================="
 echo "🎉 BUILD SUCCESSFUL! Files are ready in build/web"
