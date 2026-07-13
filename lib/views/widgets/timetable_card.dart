@@ -7,7 +7,7 @@ import 'add_slot_dialog.dart';
 class TimetableCard extends ConsumerWidget {
   final TimetableSlot slot;
 
-  const TimetableCard({Key? key, required this.slot}) : super(key: key);
+  const TimetableCard({super.key, required this.slot});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,7 +27,7 @@ class TimetableCard extends ConsumerWidget {
         boxShadow: isActive
             ? [
                 BoxShadow(
-                  color: themeColor.withOpacity(0.2),
+                  color: themeColor.withValues(alpha: 0.2),
                   blurRadius: 10,
                   spreadRadius: 1,
                   offset: const Offset(0, 4),
@@ -74,9 +74,9 @@ class TimetableCard extends ConsumerWidget {
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                               decoration: BoxDecoration(
-                                color: themeColor.withOpacity(0.15),
+                                color: themeColor.withValues(alpha: 0.15),
                                 borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: themeColor.withOpacity(0.5)),
+                                border: Border.all(color: themeColor.withValues(alpha: 0.5)),
                               ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,

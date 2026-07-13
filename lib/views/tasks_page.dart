@@ -7,7 +7,7 @@ import 'widgets/task_header.dart';
 import 'widgets/task_card.dart';
 
 class TasksPage extends ConsumerWidget {
-  const TasksPage({Key? key}) : super(key: key);
+  const TasksPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -111,7 +111,7 @@ class TasksPage extends ConsumerWidget {
                     boxShadow: isSelected
                         ? [
                             BoxShadow(
-                              color: const Color(0xFFE94057).withOpacity(0.3),
+                              color: const Color(0xFFE94057).withValues(alpha: 0.3),
                               blurRadius: 6,
                               offset: const Offset(0, 2),
                             ),

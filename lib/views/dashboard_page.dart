@@ -5,11 +5,10 @@ import '../providers/task_provider.dart';
 import '../providers/timetable_provider.dart';
 import '../models/timetable_slot.dart';
 import '../models/task.dart';
-import 'widgets/timetable_card.dart';
 import 'widgets/task_card.dart';
 
 class DashboardPage extends ConsumerWidget {
-  const DashboardPage({Key? key}) : super(key: key);
+  const DashboardPage({super.key});
 
   String _getGreeting() {
     final hour = DateTime.now().hour;
@@ -237,7 +236,7 @@ class DashboardPage extends ConsumerWidget {
         Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(icon, color: color, size: 24),
@@ -296,14 +295,14 @@ class DashboardPage extends ConsumerWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [themeColor, themeColor.withOpacity(0.8)],
+          colors: [themeColor, themeColor.withValues(alpha: 0.8)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: themeColor.withOpacity(0.3),
+            color: themeColor.withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -364,7 +363,7 @@ class DashboardPage extends ConsumerWidget {
               'with ${slot.teacher}',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withValues(alpha: 0.9),
               ),
             ),
           ],
@@ -436,7 +435,7 @@ class DashboardPage extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(
-              color: themeColor.withOpacity(0.1),
+              color: themeColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
@@ -481,7 +480,7 @@ class DashboardPage extends ConsumerWidget {
 
     return Column(
       children: [
-        ...previewTasks.map((task) => TaskCard(task: task)).toList(),
+        ...previewTasks.map((task) => TaskCard(task: task)),
         if (activeTasks.length > 3) ...[
           const SizedBox(height: 6),
           Center(

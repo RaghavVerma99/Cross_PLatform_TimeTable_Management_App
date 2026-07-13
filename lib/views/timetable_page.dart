@@ -5,7 +5,7 @@ import 'widgets/timetable_card.dart';
 import 'widgets/add_slot_dialog.dart';
 
 class TimetablePage extends ConsumerWidget {
-  const TimetablePage({Key? key}) : super(key: key);
+  const TimetablePage({super.key});
 
   final List<String> _dayAbbr = const ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
   final List<String> _dayNames = const [
@@ -164,7 +164,7 @@ class TimetablePage extends ConsumerWidget {
                     boxShadow: isSelected
                         ? [
                             BoxShadow(
-                              color: const Color(0xFFE94057).withOpacity(0.3),
+                              color: const Color(0xFFE94057).withValues(alpha: 0.3),
                               blurRadius: 6,
                               offset: const Offset(0, 2),
                             ),

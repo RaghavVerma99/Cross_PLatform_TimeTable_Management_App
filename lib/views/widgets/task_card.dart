@@ -6,7 +6,7 @@ import '../../providers/task_provider.dart';
 class TaskCard extends ConsumerWidget {
   final Task task;
 
-  const TaskCard({Key? key, required this.task}) : super(key: key);
+  const TaskCard({super.key, required this.task});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

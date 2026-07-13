@@ -7,7 +7,7 @@ import '../../providers/timetable_provider.dart';
 class AddSlotDialog extends ConsumerStatefulWidget {
   final TimetableSlot? slotToEdit;
 
-  const AddSlotDialog({Key? key, this.slotToEdit}) : super(key: key);
+  const AddSlotDialog({super.key, this.slotToEdit});
 
   @override
   ConsumerState<AddSlotDialog> createState() => _AddSlotDialogState();
@@ -218,7 +218,7 @@ class _AddSlotDialogState extends ConsumerState<AddSlotDialog> {
 
               // Day Select Dropdown
               DropdownButtonFormField<int>(
-                value: _selectedDay,
+                initialValue: _selectedDay,
                 dropdownColor: const Color(0xFF2C2C2C),
                 style: const TextStyle(color: Colors.white),
                 decoration: _inputDecoration('Day of Week', Icons.calendar_today_outlined),
@@ -331,7 +331,7 @@ class _AddSlotDialogState extends ConsumerState<AddSlotDialog> {
                           boxShadow: isSelected
                               ? [
                                   BoxShadow(
-                                    color: Color(colorVal).withOpacity(0.5),
+                                    color: Color(colorVal).withValues(alpha: 0.5),
                                     blurRadius: 8,
                                     spreadRadius: 1,
                                   )

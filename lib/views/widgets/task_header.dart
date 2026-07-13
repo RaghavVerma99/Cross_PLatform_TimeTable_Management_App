@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import '../../providers/task_provider.dart';
 
 class TaskHeader extends ConsumerWidget {
-  const TaskHeader({Key? key}) : super(key: key);
+  const TaskHeader({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -141,7 +141,7 @@ class TaskHeader extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(4),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFFE94057).withOpacity(0.4),
+                              color: const Color(0xFFE94057).withValues(alpha: 0.4),
                               blurRadius: 6,
                               spreadRadius: 1,
                             ),

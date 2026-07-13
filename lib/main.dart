@@ -19,7 +19,7 @@ void main() async {
 }
 
 class TaskFlowApp extends StatelessWidget {
-  const TaskFlowApp({Key? key}) : super(key: key);
+  const TaskFlowApp({super.key});
 
   @override
   Widget build(BuildContext context) {
