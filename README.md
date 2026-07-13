@@ -1,78 +1,87 @@
-# ⚡ TaskFlow — Developer & Deployment Manual
+# 📱 TaskFlow & Schedule Manager — Technical Manual
 
-TaskFlow is a production-grade, minimalist task management client compiled in **Flutter 3.x / Dart 3.x**. It implements **Riverpod** for declarative state, **Hive** for zero-latency local storage, and **Vercel** serverless pipelines for static web delivery.
-
----
-
-## 🛠️ Technical Stack Specification
-
-| Layer | Technology / Package | Version | Purpose |
-| :--- | :--- | :--- | :--- |
-| **SDK** | Dart & Flutter | `>=3.0.0 <4.0.0` | Core compiler & runtime |
-| **State** | `flutter_riverpod` | `^2.5.1` | Decoupled reactive view-models & filtering state |
-| **Database** | `hive_flutter` | `^1.1.0` | In-memory key-value/document store with disk sync |
-| **Utils** | `uuid` & `intl` | `^4.3.3` / `^0.19.0` | Unique ID generation & localized date presentation |
-| **CI/CD** | Vercel Static hosting | `V2` | Automated Git-triggered cloud web builds |
+TaskFlow is a production-grade, minimalist task and schedule management client built with **Flutter** and **Dart**. It implements a premium, true-black OLED **Apple iOS design aesthetic** (using Cupertino principles and custom animated canvas/activity rings), backed by **Riverpod** for reactive state propagation and **Hive** for zero-latency local document caching.
 
 ---
 
-## 📂 Project Architecture & Data Flow
+## 🛠️ Technical Stack & Architecture
+
+### Stack Specifications
+- **Framework**: `Flutter SDK (>=3.0.0)` — Cross-platform rendering engine.
+- **State Management**: `flutter_riverpod (v2.x)` — Decoupled unidirectional state-notifier pattern with reactive filtering providers.
+- **Database/Caching**: `hive_flutter (v1.x)` — Lightweight, zero-dependency NoSQL key-value store syncing binary payloads directly to disk.
+- **Design Paradigm**: Cupertino OLED Dark theme (`0xFF000000` backing, `0xFF1C1C1E` cards, `0xFF0A84FF` System Blue primary accent).
+
+---
+
+## 📂 Project Topology & Directory Architecture
 
 ```text
-[UI Widgets] ──(reads)──> [filteredTasksProvider] <──(filters)── [taskFilterProvider]
-      │                               ▲
- (triggers)                        (notifies)
-      ▼                               │
-[User Action] ──(invokes)──> [TaskNotifier] ──(saves)──> [Hive DB Box ('tasks')]
+lib/
+├── main.dart                 # App bootstrap, database box initialization, ProviderScope mount
+├── models/
+│   ├── task.dart             # Task data schema with direct map serialization (bypasses reflection)
+│   └── timetable_slot.dart   # Schedule slot entity with active-state runtime evaluation logic
+├── providers/
+│   ├── task_provider.dart    # Riverpod StateNotifier for CRUD operations & filter states
+│   └── timetable_provider.dart# Riverpod StateNotifier for weekly slot filtering & active slot polling
+└── views/
+    ├── home_screen.dart      # Navigation controller displaying iOS-style translucent bottom tab bar
+    ├── dashboard_page.dart   # Main view housing Apple Fitness-style circular activity ring
+    ├── tasks_page.dart       # Task view with Cupertino Sliding Segmented Control filter chips
+    ├── timetable_page.dart   # Weekly scheduler showing circular iOS Calendar style day badges
+    └── widgets/
+        ├── task_card.dart    # iOS Reminders-style checklist widget with check animation
+        ├── task_header.dart  # Top bar task statistics calculation and Indigo progress bar
+        ├── timetable_card.dart# Sleek Gray 6 slot card containing active pulse state indicators
+        └── add_slot_dialog.dart# Apple Form style modal editor with custom iOS color presets
 ```
-
-### File Hierarchy Mapping
-- [main.dart](file:///C:/Users/rissh/OneDrive/Documents/AntiGravity/timetable_app/lib/main.dart) — Initializes `Hive.initFlutter()`, opens the `'tasks'` database box, and mounts the root `ProviderScope`.
-- [task.dart](file:///C:/Users/rissh/OneDrive/Documents/AntiGravity/timetable_app/lib/models/task.dart) — Defines the `Task` entity structure. Performs database serialization through `toMap()` and `fromMap()` to bypass reflection and code-generation overhead.
-- [task_provider.dart](file:///C:/Users/rissh/OneDrive/Documents/AntiGravity/timetable_app/lib/providers/task_provider.dart) — Houses the `TaskNotifier` (managing state and database writes) and custom filters (`All`, `Active`, `Completed`).
-- [task_screen.dart](file:///C:/Users/rissh/OneDrive/Documents/AntiGravity/timetable_app/lib/views/task_screen.dart) — Primary viewport scaffold displaying headers, filter chips, and task lists.
-- **[widgets/](file:///C:/Users/rissh/OneDrive/Documents/AntiGravity/timetable_app/lib/views/widgets/)** — Contains isolated atomic presentation units:
-  - [task_header.dart](file:///C:/Users/rissh/OneDrive/Documents/AntiGravity/timetable_app/lib/views/widgets/task_header.dart): Calculates live execution ratios and controls the status bar.
-  - [task_card.dart](file:///C:/Users/rissh/OneDrive/Documents/AntiGravity/timetable_app/lib/views/widgets/task_card.dart): Handles touch gestures (tap to edit, long-press/icon to delete, toggle checkbox).
 
 ---
 
-## 🚀 Execution & Cloud Deployment Runbook
+## ⚙️ Core Technical Workflows
 
-### Local Development Setup
-Ensure the Flutter SDK is installed and added to your environmental `$PATH`. Run:
-```bash
-cd timetable_app
-flutter create --overwrite .      # Regenerates platform folders (android/ios/web)
-flutter pub get                  # Resolves and downloads packages
-flutter run -d chrome            # Launches web development server
-flutter run                      # Compiles and runs on connected device/emulator
+### 1. State Management & Filtering Pipeline
+Riverpod selectors are optimized to prevent unnecessary widget rebuilds. For example, `filteredTasksProvider` listens to changes in both the raw `taskProvider` and `taskFilterProvider` using:
+```dart
+final filteredTasksProvider = Provider<List<Task>>((ref) {
+  final tasks = ref.watch(taskProvider);
+  final filter = ref.watch(taskFilterProvider);
+  // Evaluates and returns filtered lists dynamically
+});
 ```
 
-### Native Mobile Builds
-```bash
-flutter build apk --release      # Outputs optimized Android APK to build/app/outputs/flutter-apk/
-flutter build appbundle --release # Outputs optimized AAB for Google Play Store upload
+### 2. Local Database Synchronization (Hive)
+Both tasks and timetable slots are saved locally. Serialization maps are handled directly inside the data models to optimize memory and load speeds:
+```dart
+// Native Hive box transactions bypass heavy ORM engines
+final taskBox = Hive.box('tasks');
+taskBox.put(task.id, task.toMap());
 ```
 
-### 🌐 Vercel Cloud Pipeline Configuration
-Deployments are fully automated via `vercel.json` pointing to a customized runtime shell script.
-
-#### Configuration File: [vercel.json](file:///C:/Users/rissh/OneDrive/Documents/AntiGravity/timetable_app/vercel.json)
-Directs Vercel to route virtual paths to `index.html` (supporting routing) and overrides commands:
-```json
-{
-  "cleanUrls": true,
-  "buildCommand": "bash build-vercel.sh",
-  "outputDirectory": "build/web"
+### 3. Active-Slot Telemetry & Pulse Indicators
+The application dynamically calculates if a schedule slot is currently running based on the user's local time:
+```dart
+bool isActiveAt(DateTime time) {
+  final nowMinutes = time.hour * 60 + time.minute;
+  // Convert slot start/end strings to minutes & compare
+  return nowMinutes >= startMin && nowMinutes < endMin;
 }
 ```
 
-#### Build Shell Script: [build-vercel.sh](file:///C:/Users/rissh/OneDrive/Documents/AntiGravity/timetable_app/build-vercel.sh)
-Executed by Vercel's build VM. You do not need to pre-configure or install Flutter on your dashboard:
-1. Clones the stable Flutter SDK (`--depth 1` shallow clone to speed up builds).
-2. Sets environment `$PATH` configuration.
-3. Automatically triggers template configuration (`flutter create .`).
-4. Compiles the static web bundle using the CanvasKit engine (`flutter build web --release --web-renderer canvaskit`).
+---
 
-To deploy, push the workspace to your Git provider, connect Vercel, set the project's **Root Directory** to `timetable_app`, and click **Deploy**.
+## 🚀 Setup & Cloud Compilation
+
+### Local Development Setup
+Run the following inside the `timetable_app/` directory:
+```bash
+flutter pub get                  # Resolves dependencies
+flutter run -d chrome            # Boots Web CanvasKit preview
+flutter run                      # Compiles to native target (Android/iOS)
+```
+
+### Cloud Compilation via Vercel Pipeline
+Deployments are automated through a Vercel-compatible shell pipeline:
+- `vercel.json` maps Vercel builders to trigger [build-vercel.sh](file:///C:/Users/rissh/OneDrive/Documents/AntiGravity/timetable_app/build-vercel.sh)
+- The shell script builds the application using the **CanvasKit renderer** (`flutter build web --release --web-renderer canvaskit`) to guarantee high-performance anti-aliasing and pixel-perfect drawing of the Apple design system elements.
