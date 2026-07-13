@@ -1,6 +1,6 @@
 # 📱 TaskFlow & Schedule Manager — Technical Manual
 
-TaskFlow is a production-grade, minimalist task and schedule management client built with **Flutter** and **Dart**. It implements a premium, true-black OLED **Apple iOS design aesthetic** (using Cupertino principles and custom animated canvas/activity rings), backed by **Riverpod** for reactive state propagation and **Hive** for zero-latency local document caching.
+TaskFlow is a production-grade, minimalist task and schedule management client built with **Flutter** and **Dart**.  Backed by **Riverpod** for reactive state propagation and **Hive** for zero-latency local document caching.
 
 ---
 
