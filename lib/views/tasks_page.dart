@@ -15,7 +15,7 @@ class TasksPage extends ConsumerWidget {
     final activeFilter = ref.watch(taskFilterProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF121212),
+      backgroundColor: const Color(0xFF000000), // OLED Black
       body: SafeArea(
         child: Column(
           children: [
@@ -37,31 +37,13 @@ class TasksPage extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddTaskDialog(context, ref),
-        elevation: 6,
-        backgroundColor: Colors.transparent,
-        child: Container(
-          width: 56,
-          height: 56,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: LinearGradient(
-              colors: [Color(0xFF8A2387), Color(0xFFE94057), Color(0xFFF27121)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Color(0xFFE94057),
-                blurRadius: 10,
-                offset: Offset(0, 4),
-              ),
-            ],
-          ),
-          child: const Icon(
-            Icons.add_rounded,
-            size: 32,
-            color: Colors.white,
-          ),
+        elevation: 3,
+        backgroundColor: const Color(0xFF0A84FF), // Apple System Blue
+        shape: const CircleBorder(),
+        child: const Icon(
+          Icons.add_rounded,
+          size: 28,
+          color: Colors.white,
         ),
       ),
     );
@@ -69,9 +51,13 @@ class TasksPage extends ConsumerWidget {
 
   Widget _buildFilterRow(BuildContext context, WidgetRef ref, TaskFilter activeFilter) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      padding: const EdgeInsets.all(3),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1C1C1E), // Apple System Gray 6
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: TaskFilter.values.map((filter) {
           final isSelected = filter == activeFilter;
           String label;
@@ -89,45 +75,33 @@ class TasksPage extends ConsumerWidget {
           }
 
           return Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4.0),
-              child: GestureDetector(
-                onTap: () {
-                  ref.read(taskFilterProvider.notifier).state = filter;
-                },
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    gradient: isSelected
-                        ? const LinearGradient(
-                            colors: [Color(0xFF8A2387), Color(0xFFE94057), Color(0xFFF27121)],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
+            child: GestureDetector(
+              onTap: () {
+                ref.read(taskFilterProvider.notifier).state = filter;
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 150),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  color: isSelected ? const Color(0xFF2C2C2E) : Colors.transparent, // Apple System Gray 5
+                  borderRadius: BorderRadius.circular(6),
+                  boxShadow: isSelected
+                      ? [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 2,
+                            offset: const Offset(0, 1),
                           )
-                        : null,
-                    color: isSelected ? null : const Color(0xFF1E1E1E),
-                    boxShadow: isSelected
-                        ? [
-                            BoxShadow(
-                              color: const Color(0xFFE94057).withValues(alpha: 0.3),
-                              blurRadius: 6,
-                              offset: const Offset(0, 2),
-                            ),
-                          ]
-                        : [],
-                    border: isSelected
-                        ? null
-                        : Border.all(color: const Color(0xFF2E2E2E), width: 1.5),
-                  ),
-                  child: Text(
-                    label,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: isSelected ? Colors.white : const Color(0xFFB0B0B0),
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                    ),
+                        ]
+                      : [],
+                ),
+                child: Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: isSelected ? Colors.white : const Color(0xFF8E8E93), // iOS System Gray
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                    fontSize: 13,
                   ),
                 ),
               ),
@@ -167,13 +141,13 @@ class TasksPage extends ConsumerWidget {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xFF1E1E1E),
-                border: Border.all(color: const Color(0xFF2E2E2E), width: 2),
+                color: const Color(0xFF1C1C1E), // Apple System Gray 6
+                border: Border.all(color: const Color(0xFF2C2C2E), width: 0.8),
               ),
               child: Icon(
                 icon,
                 size: 54,
-                color: const Color(0xFFE94057),
+                color: const Color(0xFF0A84FF), // Apple System Blue
               ),
             ),
             const SizedBox(height: 16),
@@ -181,8 +155,8 @@ class TasksPage extends ConsumerWidget {
               message,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 15,
-                color: Color(0xFF8A8A8A),
+                fontSize: 14,
+                color: Color(0xFF8E8E93),
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -199,27 +173,39 @@ class TasksPage extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF2C2C2C),
-        title: const Text('Add Task', style: TextStyle(color: Colors.white)),
+        backgroundColor: const Color(0xFF1C1C1E), // Apple System Gray 6
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18),
+          side: const BorderSide(color: Color(0xFF2C2C2E), width: 0.8),
+        ),
+        title: const Text(
+          'Add Task',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+        ),
         content: TextFormField(
           controller: controller,
           autofocus: true,
-          style: const TextStyle(color: Colors.white),
-          decoration: const InputDecoration(
+          style: const TextStyle(color: Colors.white, fontSize: 15),
+          decoration: InputDecoration(
             hintText: 'What needs to be done?',
-            hintStyle: TextStyle(color: Color(0xFF8E8E8E)),
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFF4E4E4E)),
+            hintStyle: const TextStyle(color: Color(0xFF8E8E93)),
+            filled: true,
+            fillColor: const Color(0xFF2C2C2E), // Apple System Gray 5
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: Colors.transparent),
             ),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFFE94057)),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: Color(0xFF0A84FF), width: 1.5),
             ),
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel', style: TextStyle(color: Color(0xFFB0B0B0))),
+            child: const Text('Cancel', style: TextStyle(color: Color(0xFF8E8E93), fontWeight: FontWeight.w500)),
           ),
           TextButton(
             onPressed: () {
@@ -234,7 +220,7 @@ class TasksPage extends ConsumerWidget {
               }
               Navigator.of(context).pop();
             },
-            child: const Text('Add', style: TextStyle(color: Color(0xFFE94057))),
+            child: const Text('Add', style: TextStyle(color: Color(0xFF0A84FF), fontWeight: FontWeight.bold)),
           ),
         ],
       ),

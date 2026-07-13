@@ -37,21 +37,12 @@ class TaskHeader extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'TaskFlow',
+                    'Tasks',
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                  Text(
-                    'TASK MANAGER',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w800,
-                      color: Color(0xFFF27121),
-                      letterSpacing: 2.0,
+                      letterSpacing: -0.5,
                     ),
                   ),
                 ],
@@ -59,15 +50,15 @@ class TaskHeader extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1E1E1E),
+                  color: const Color(0xFF1C1C1E), // Apple System Gray 6
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: const Color(0xFF2E2E2E)),
+                  border: Border.all(color: const Color(0xFF2C2C2E), width: 0.8),
                 ),
                 child: Text(
                   dateStr,
                   style: const TextStyle(
                     fontSize: 12,
-                    color: Color(0xFFD0D0D0),
+                    color: Color(0xFFEBEBF5),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -81,9 +72,9 @@ class TaskHeader extends ConsumerWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: const Color(0xFF1E1E1E),
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: const Color(0xFF2C2C2C), width: 1.5),
+              color: const Color(0xFF1C1C1E), // Apple System Gray 6
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: const Color(0xFF2C2C2E), width: 0.8),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,18 +85,19 @@ class TaskHeader extends ConsumerWidget {
                     const Text(
                       'Daily Progress',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
+                        letterSpacing: -0.2,
                       ),
                     ),
                     if (total > 0)
                       Text(
                         '${(progress * 100).toInt()}%',
                         style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFFE94057),
+                          color: Color(0xFF5E5CE6), // Apple System Indigo
                         ),
                       ),
                   ],
@@ -115,7 +107,7 @@ class TaskHeader extends ConsumerWidget {
                   statsText,
                   style: const TextStyle(
                     fontSize: 13,
-                    color: Color(0xFFB0B0B0),
+                    color: Color(0xFF8E8E93),
                   ),
                 ),
                 if (total > 0) ...[
@@ -123,27 +115,24 @@ class TaskHeader extends ConsumerWidget {
                   Stack(
                     children: [
                       Container(
-                        height: 8,
+                        height: 6,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF2E2E2E),
-                          borderRadius: BorderRadius.circular(4),
+                          color: const Color(0xFF2C2C2E), // Apple System Gray 5
+                          borderRadius: BorderRadius.circular(3),
                         ),
                       ),
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 400),
                         curve: Curves.easeOut,
-                        height: 8,
+                        height: 6,
                         width: (MediaQuery.of(context).size.width - 82) * progress,
                         decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF8A2387), Color(0xFFE94057), Color(0xFFF27121)],
-                          ),
-                          borderRadius: BorderRadius.circular(4),
+                          color: const Color(0xFF5E5CE6), // Apple System Indigo
+                          borderRadius: BorderRadius.circular(3),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFFE94057).withValues(alpha: 0.4),
-                              blurRadius: 6,
-                              spreadRadius: 1,
+                              color: const Color(0xFF5E5CE6).withValues(alpha: 0.2),
+                              blurRadius: 4,
                             ),
                           ],
                         ),

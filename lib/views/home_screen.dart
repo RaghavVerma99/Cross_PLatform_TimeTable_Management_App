@@ -30,8 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
         decoration: const BoxDecoration(
           border: Border(
             top: BorderSide(
-              color: Color(0xFF2C2C2C),
-              width: 1.5,
+              color: Color(0xFF2C2C2E), // Apple-style thin border
+              width: 0.5,
             ),
           ),
         ),
@@ -42,17 +42,18 @@ class _HomeScreenState extends State<HomeScreen> {
               _currentIndex = index;
             });
           },
-          backgroundColor: const Color(0xFF1E1E1E),
-          selectedItemColor: const Color(0xFFE94057),
-          unselectedItemColor: const Color(0xFF8E8E8E),
-          selectedFontSize: 12,
-          unselectedFontSize: 12,
-          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+          backgroundColor: const Color(0xFF1C1C1E), // Apple System Gray 6
+          selectedItemColor: const Color(0xFF0A84FF), // Apple System Blue
+          unselectedItemColor: const Color(0xFF8E8E93), // Apple System Gray
+          selectedFontSize: 10, // iOS standard is compact
+          unselectedFontSize: 10,
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
+          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
           type: BottomNavigationBarType.fixed,
           items: const [
             BottomNavigationBarItem(
-              icon: Icon(Icons.dashboard_outlined),
-              activeIcon: Icon(Icons.dashboard_rounded),
+              icon: Icon(Icons.grid_view_outlined),
+              activeIcon: Icon(Icons.grid_view_rounded),
               label: 'Dashboard',
             ),
             BottomNavigationBarItem(
@@ -61,8 +62,8 @@ class _HomeScreenState extends State<HomeScreen> {
               label: 'Schedule',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.task_alt_outlined),
-              activeIcon: Icon(Icons.task_alt_rounded),
+              icon: Icon(Icons.check_circle_outline_rounded),
+              activeIcon: Icon(Icons.check_circle_rounded),
               label: 'Tasks',
             ),
           ],

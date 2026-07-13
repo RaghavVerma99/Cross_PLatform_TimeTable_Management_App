@@ -30,24 +30,26 @@ class TaskFlowApp extends StatelessWidget {
       darkTheme: ThemeData(
         useMaterial3: true,
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF121212),
+        scaffoldBackgroundColor: const Color(0xFF000000), // Apple OLED Black
         colorScheme: const ColorScheme.dark(
-          primary: Color(0xFFE94057),
-          secondary: Color(0xFF8A2387),
-          surface: Color(0xFF1E1E1E),
-          error: Colors.redAccent,
+          primary: Color(0xFF0A84FF),      // Apple System Blue
+          secondary: Color(0xFF5E5CE6),    // Apple System Indigo
+          surface: Color(0xFF1C1C1E),      // Apple System Gray 6
+          error: Color(0xFFFF453A),        // Apple System Red
         ),
         textTheme: const TextTheme(
           titleLarge: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            letterSpacing: 0.5,
+            letterSpacing: -0.5, // SF Pro style tighter letter spacing
           ),
-          bodyLarge: TextStyle(color: Colors.white70),
-          bodyMedium: TextStyle(color: Colors.white60),
+          bodyLarge: TextStyle(color: Colors.white),
+          bodyMedium: TextStyle(color: Color(0xFFEBEBF5)),
         ),
+        dialogBackgroundColor: const Color(0xFF1C1C1E),
       ),
       home: const HomeScreen(),
     );
   }
 }
+

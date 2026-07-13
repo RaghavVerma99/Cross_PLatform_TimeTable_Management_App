@@ -36,7 +36,7 @@ class DashboardPage extends ConsumerWidget {
     final dateStr = DateFormat('EEEE, MMMM d').format(today);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF121212),
+      backgroundColor: const Color(0xFF000000), // OLED Black
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -57,30 +57,24 @@ class DashboardPage extends ConsumerWidget {
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
+                          letterSpacing: -0.5,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         dateStr,
                         style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.white54,
+                          fontSize: 13,
+                          color: Color(0xFF8E8E93), // iOS System Gray
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                     ],
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: const Color(0xFFE94057), width: 1.5),
-                    ),
-                    padding: const EdgeInsets.all(4),
-                    child: const CircleAvatar(
-                      radius: 20,
-                      backgroundColor: Color(0xFF1E1E1E),
-                      child: Icon(Icons.person_rounded, color: Colors.white70),
-                    ),
+                  const CircleAvatar(
+                    radius: 22,
+                    backgroundColor: Color(0xFF1C1C1E), // Apple System Gray 6
+                    child: Icon(Icons.person_rounded, color: Color(0xFF8E8E93), size: 24),
                   ),
                 ],
               ),
@@ -97,7 +91,7 @@ class DashboardPage extends ConsumerWidget {
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
-                  letterSpacing: 0.5,
+                  letterSpacing: -0.4,
                 ),
               ),
               const SizedBox(height: 12),
@@ -112,7 +106,7 @@ class DashboardPage extends ConsumerWidget {
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
-                    letterSpacing: 0.5,
+                    letterSpacing: -0.4,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -130,7 +124,7 @@ class DashboardPage extends ConsumerWidget {
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
-                      letterSpacing: 0.5,
+                      letterSpacing: -0.4,
                     ),
                   ),
                   if (activeTasks.isNotEmpty)
@@ -138,7 +132,7 @@ class DashboardPage extends ConsumerWidget {
                       '${activeTasks.length} left',
                       style: const TextStyle(
                         fontSize: 13,
-                        color: Color(0xFFE94057),
+                        color: Color(0xFF0A84FF), // Apple System Blue
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -160,69 +154,83 @@ class DashboardPage extends ConsumerWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: const Color(0xFF2C2C2C), width: 1.5),
+        color: const Color(0xFF1C1C1E), // Apple System Gray 6
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0xFF2C2C2E), width: 0.8),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          const Text(
-            'Daily Overview',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildStatItem('Today\'s Classes', '$totalClassesToday', Icons.menu_book_rounded, const Color(0xFF1AD2D9)),
-              _buildStatItem('Tasks Left', '$activeTasks', Icons.playlist_add_check_rounded, const Color(0xFFE94057)),
-            ],
-          ),
-          if (totalTasks > 0) ...[
-            const SizedBox(height: 20),
-            const Divider(color: Color(0xFF2C2C2C)),
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Task Completion',
-                  style: TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.w500),
+                  'Daily Summary',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                    letterSpacing: -0.2,
+                  ),
                 ),
-                Text(
-                  '${(taskProgress * 100).toInt()}%',
-                  style: const TextStyle(color: Color(0xFFE94057), fontSize: 13, fontWeight: FontWeight.bold),
-                ),
+                const SizedBox(height: 16),
+                _buildStatItem('Classes Today', '$totalClassesToday', Icons.calendar_today_rounded, const Color(0xFFFF9F0A)), // Apple Orange
+                const SizedBox(height: 12),
+                _buildStatItem('Pending Tasks', '$activeTasks', Icons.checklist_rounded, const Color(0xFF0A84FF)), // Apple Blue
               ],
             ),
-            const SizedBox(height: 8),
-            Stack(
-              children: [
-                Container(
-                  height: 6,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF2C2C2C),
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                ),
-                FractionallySizedBox(
-                  widthFactor: taskProgress,
-                  child: Container(
-                    height: 6,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF8A2387), Color(0xFFE94057), Color(0xFFF27121)],
-                      ),
-                      borderRadius: BorderRadius.circular(3),
+          ),
+          if (totalTasks > 0) ...[
+            const SizedBox(width: 16),
+            SizedBox(
+              width: 70,
+              height: 70,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  SizedBox(
+                    width: 64,
+                    height: 64,
+                    child: CircularProgressIndicator(
+                      value: 1.0,
+                      strokeWidth: 7,
+                      color: const Color(0xFF2C2C2E), // Apple System Gray 5
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(
+                    width: 64,
+                    height: 64,
+                    child: CircularProgressIndicator(
+                      value: taskProgress,
+                      strokeWidth: 7,
+                      color: const Color(0xFF5E5CE6), // Apple System Indigo
+                      strokeCap: StrokeCap.round,
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '${(taskProgress * 100).toInt()}%',
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                      const Text(
+                        'DONE',
+                        style: TextStyle(
+                          fontSize: 8,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF8E8E93),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ],
@@ -234,12 +242,12 @@ class DashboardPage extends ConsumerWidget {
     return Row(
       children: [
         Container(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: color.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(10),
           ),
-          child: Icon(icon, color: color, size: 24),
+          child: Icon(icon, color: color, size: 20),
         ),
         const SizedBox(width: 12),
         Column(
@@ -248,16 +256,17 @@ class DashboardPage extends ConsumerWidget {
             Text(
               count,
               style: const TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
+                letterSpacing: -0.3,
               ),
             ),
             Text(
               title,
               style: const TextStyle(
                 fontSize: 12,
-                color: Colors.white54,
+                color: Color(0xFF8E8E93),
               ),
             ),
           ],
@@ -272,15 +281,15 @@ class DashboardPage extends ConsumerWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
         decoration: BoxDecoration(
-          color: const Color(0xFF1E1E1E),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFF2C2C2C), width: 1.5),
+          color: const Color(0xFF1C1C1E),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFF2C2C2E), width: 0.8),
         ),
         child: const Center(
           child: Text(
-            'No class currently active 📚',
+            'No classes right now',
             style: TextStyle(
-              color: Colors.white54,
+              color: Color(0xFF8E8E93),
               fontSize: 14,
               fontWeight: FontWeight.w500,
             ),
@@ -294,21 +303,11 @@ class DashboardPage extends ConsumerWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [themeColor, themeColor.withValues(alpha: 0.8)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: themeColor.withValues(alpha: 0.3),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        color: const Color(0xFF1C1C1E),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: themeColor.withValues(alpha: 0.3), width: 1.0),
       ),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -316,22 +315,29 @@ class DashboardPage extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: Colors.white24,
-                  borderRadius: BorderRadius.circular(12),
+                  color: const Color(0xFF30D158).withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(6),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.radio_button_checked_rounded, color: Colors.white, size: 12),
-                    SizedBox(width: 6),
-                    Text(
-                      'ACTIVE NOW',
+                    Container(
+                      width: 6,
+                      height: 6,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0xFF30D158),
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    const Text(
+                      'LIVE NOW',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Color(0xFF30D158),
                         fontSize: 9,
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.bold,
                         letterSpacing: 0.5,
                       ),
                     ),
@@ -340,44 +346,45 @@ class DashboardPage extends ConsumerWidget {
               ),
               Text(
                 slot.room,
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: themeColor,
                   fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  fontSize: 13,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Text(
             slot.subject,
             style: const TextStyle(
-              fontSize: 22,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Colors.white,
+              letterSpacing: -0.5,
             ),
           ),
           if (slot.teacher.isNotEmpty) ...[
-            const SizedBox(height: 4),
+            const SizedBox(height: 2),
             Text(
-              'with ${slot.teacher}',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.white.withValues(alpha: 0.9),
+              slot.teacher,
+              style: const TextStyle(
+                fontSize: 13,
+                color: Color(0xFF8E8E93),
               ),
             ),
           ],
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Row(
             children: [
-              const Icon(Icons.access_time_rounded, color: Colors.white, size: 16),
+              Icon(Icons.access_time_rounded, color: themeColor, size: 14),
               const SizedBox(width: 6),
               Text(
                 slot.formattedTimeRange,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
                 ),
               ),
             ],
@@ -394,15 +401,15 @@ class DashboardPage extends ConsumerWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFF2C2C2C), width: 1.5),
+        color: const Color(0xFF1C1C1E),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFF2C2C2E), width: 0.8),
       ),
       child: Row(
         children: [
           Container(
             width: 4,
-            height: 45,
+            height: 36,
             decoration: BoxDecoration(
               color: themeColor,
               borderRadius: BorderRadius.circular(2),
@@ -419,6 +426,7 @@ class DashboardPage extends ConsumerWidget {
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
+                    letterSpacing: -0.3,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -426,17 +434,17 @@ class DashboardPage extends ConsumerWidget {
                   '${slot.formattedTimeRange} • ${slot.room}',
                   style: const TextStyle(
                     fontSize: 12,
-                    color: Colors.white54,
+                    color: Color(0xFF8E8E93),
                   ),
                 ),
               ],
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
               color: themeColor.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
               slot.startTime,

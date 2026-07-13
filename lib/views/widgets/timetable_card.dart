@@ -16,39 +16,38 @@ class TimetableCard extends ConsumerWidget {
     final themeColor = Color(slot.colorValue);
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E),
-        borderRadius: BorderRadius.circular(20),
+        color: const Color(0xFF1C1C1E), // Apple System Gray 6
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isActive ? themeColor : const Color(0xFF2C2C2C),
-          width: isActive ? 2.0 : 1.5,
+          color: isActive ? themeColor : const Color(0xFF2C2C2E), // Subtle subject color for active border
+          width: isActive ? 1.0 : 0.8,
         ),
         boxShadow: isActive
             ? [
                 BoxShadow(
-                  color: themeColor.withValues(alpha: 0.2),
-                  blurRadius: 10,
-                  spreadRadius: 1,
-                  offset: const Offset(0, 4),
+                  color: themeColor.withValues(alpha: 0.15),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
                 ),
               ]
             : [],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         child: IntrinsicHeight(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Color side-indicator bar
               Container(
-                width: 6,
+                width: 5,
                 color: themeColor,
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 8, 16),
+                  padding: const EdgeInsets.fromLTRB(16, 14, 8, 14),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -66,17 +65,17 @@ class TimetableCard extends ConsumerWidget {
                                   color: themeColor,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 13,
+                                  letterSpacing: -0.2,
                                 ),
                               ),
                             ],
                           ),
                           if (isActive)
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
-                                color: themeColor.withValues(alpha: 0.15),
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: themeColor.withValues(alpha: 0.5)),
+                                color: const Color(0xFF30D158).withValues(alpha: 0.15), // Apple Green tint
+                                borderRadius: BorderRadius.circular(6),
                               ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -84,18 +83,18 @@ class TimetableCard extends ConsumerWidget {
                                   Container(
                                     width: 6,
                                     height: 6,
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: themeColor,
+                                      color: Color(0xFF30D158),
                                     ),
                                   ),
                                   const SizedBox(width: 6),
-                                  Text(
+                                  const Text(
                                     'LIVE NOW',
                                     style: TextStyle(
-                                      color: themeColor,
+                                      color: Color(0xFF30D158),
                                       fontSize: 9,
-                                      fontWeight: FontWeight.w900,
+                                      fontWeight: FontWeight.bold,
                                       letterSpacing: 0.5,
                                     ),
                                   ),
@@ -113,6 +112,7 @@ class TimetableCard extends ConsumerWidget {
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
+                          letterSpacing: -0.4,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -120,19 +120,19 @@ class TimetableCard extends ConsumerWidget {
                       // Room and Teacher Row
                       Row(
                         children: [
-                          Icon(Icons.location_on_outlined, size: 16, color: Colors.white60),
+                          const Icon(Icons.location_on_outlined, size: 14, color: Color(0xFF8E8E93)),
                           const SizedBox(width: 4),
                           Text(
                             slot.room,
-                            style: const TextStyle(color: Colors.white60, fontSize: 13),
+                            style: const TextStyle(color: Color(0xFF8E8E93), fontSize: 13),
                           ),
                           if (slot.teacher.isNotEmpty) ...[
                             const SizedBox(width: 16),
-                            Icon(Icons.person_outline, size: 16, color: Colors.white60),
+                            const Icon(Icons.person_outline, size: 14, color: Color(0xFF8E8E93)),
                             const SizedBox(width: 4),
                             Text(
                               slot.teacher,
-                              style: const TextStyle(color: Colors.white60, fontSize: 13),
+                              style: const TextStyle(color: Color(0xFF8E8E93), fontSize: 13),
                             ),
                           ],
                         ],
@@ -144,7 +144,7 @@ class TimetableCard extends ConsumerWidget {
                         Text(
                           slot.notes,
                           style: const TextStyle(
-                            color: Colors.white38,
+                            color: Colors.white30,
                             fontSize: 12,
                             fontStyle: FontStyle.italic,
                           ),
@@ -162,12 +162,12 @@ class TimetableCard extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.edit_outlined, color: Colors.white38, size: 20),
+                    icon: const Icon(Icons.edit_outlined, color: Colors.white30, size: 18),
                     onPressed: () => _editSlot(context),
                     padding: EdgeInsets.zero,
                   ),
                   IconButton(
-                    icon: const Icon(Icons.delete_outline_rounded, color: Colors.redAccent, size: 20),
+                    icon: const Icon(Icons.delete_outline_rounded, color: Color(0xFFFF453A), size: 18), // Apple Red
                     onPressed: () => _deleteSlot(context, ref),
                     padding: EdgeInsets.zero,
                   ),
@@ -192,20 +192,24 @@ class TimetableCard extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1E1E1E),
-        title: const Text('Delete Class?', style: TextStyle(color: Colors.white)),
-        content: Text('Are you sure you want to remove "${slot.subject}" from your timetable?', style: const TextStyle(color: Colors.white70)),
+        backgroundColor: const Color(0xFF1C1C1E), // Apple System Gray 6
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18),
+          side: const BorderSide(color: Color(0xFF2C2C2E), width: 0.8),
+        ),
+        title: const Text('Delete Class?', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+        content: Text('Are you sure you want to remove "${slot.subject}" from your timetable?', style: const TextStyle(color: Color(0xFF8E8E93), fontSize: 14)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel', style: TextStyle(color: Colors.white38)),
+            child: const Text('Cancel', style: TextStyle(color: Color(0xFF8E8E93), fontWeight: FontWeight.w500)),
           ),
           TextButton(
             onPressed: () {
               ref.read(timetableProvider.notifier).deleteSlot(slot.id);
               Navigator.of(context).pop();
             },
-            child: const Text('Delete', style: TextStyle(color: Colors.redAccent)),
+            child: const Text('Delete', style: TextStyle(color: Color(0xFFFF453A), fontWeight: FontWeight.bold)),
           ),
         ],
       ),

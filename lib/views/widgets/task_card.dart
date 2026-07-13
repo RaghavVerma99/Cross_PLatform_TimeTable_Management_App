@@ -16,14 +16,14 @@ class TaskCard extends ConsumerWidget {
       duration: const Duration(milliseconds: 200),
       opacity: isCompleted ? 0.6 : 1.0,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
         decoration: BoxDecoration(
-          color: const Color(0xFF1E1E1E),
-          borderRadius: BorderRadius.circular(16),
+          color: const Color(0xFF1C1C1E), // Apple System Gray 6
+          borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: isCompleted ? const Color(0xFF2E2E2E) : const Color(0xFF2C2C2C),
-            width: 1.5,
+            color: const Color(0xFF2C2C2E), // Apple System Gray 5 border
+            width: 0.8,
           ),
         ),
         child: ListTile(
@@ -34,18 +34,18 @@ class TaskCard extends ConsumerWidget {
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              width: 24,
-              height: 24,
+              width: 22,
+              height: 22,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: isCompleted ? const Color(0xFFE94057) : Colors.transparent,
+                color: isCompleted ? const Color(0xFF0A84FF) : Colors.transparent, // Apple System Blue
                 border: Border.all(
-                  color: isCompleted ? const Color(0xFFE94057) : const Color(0xFF7E7E7E),
-                  width: 2,
+                  color: isCompleted ? const Color(0xFF0A84FF) : const Color(0xFF48484A), // iOS Dark Gray
+                  width: 1.5,
                 ),
               ),
               child: isCompleted
-                  ? const Icon(Icons.check, size: 16, color: Colors.white)
+                  ? const Icon(Icons.check, size: 14, color: Colors.white)
                   : null,
             ),
           ),
@@ -54,15 +54,15 @@ class TaskCard extends ConsumerWidget {
             child: Text(
               task.title,
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 15,
                 fontWeight: FontWeight.w500,
-                color: isCompleted ? const Color(0xFF8E8E8E) : Colors.white,
+                color: isCompleted ? const Color(0xFF8E8E93) : Colors.white,
                 decoration: isCompleted ? TextDecoration.lineThrough : TextDecoration.none,
               ),
             ),
           ),
           trailing: IconButton(
-            icon: const Icon(Icons.delete_outline_rounded, color: Colors.redAccent, size: 22),
+            icon: const Icon(Icons.delete_outline_rounded, color: Color(0xFFFF453A), size: 20), // Apple System Red
             onPressed: () {
               ref.read(taskProvider.notifier).deleteTask(task.id);
             },
@@ -78,27 +78,39 @@ class TaskCard extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF2C2C2C),
-        title: const Text('Edit Task', style: TextStyle(color: Colors.white)),
+        backgroundColor: const Color(0xFF1C1C1E), // Apple System Gray 6
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18),
+          side: const BorderSide(color: Color(0xFF2C2C2E), width: 0.8),
+        ),
+        title: const Text(
+          'Edit Task',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+        ),
         content: TextFormField(
           controller: controller,
           autofocus: true,
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white, fontSize: 15),
           decoration: InputDecoration(
             hintText: 'Task Title',
-            hintStyle: const TextStyle(color: Color(0xFF8E8E8E)),
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey.shade600),
+            hintStyle: const TextStyle(color: Color(0xFF8E8E93)),
+            filled: true,
+            fillColor: const Color(0xFF2C2C2E), // Apple System Gray 5
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: Colors.transparent),
             ),
-            focusedBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFFE94057)),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: Color(0xFF0A84FF), width: 1.5),
             ),
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel', style: TextStyle(color: Color(0xFFB0B0B0))),
+            child: const Text('Cancel', style: TextStyle(color: Color(0xFF8E8E93), fontWeight: FontWeight.w500)),
           ),
           TextButton(
             onPressed: () {
@@ -110,7 +122,7 @@ class TaskCard extends ConsumerWidget {
               }
               Navigator.of(context).pop();
             },
-            child: const Text('Save', style: TextStyle(color: Color(0xFFE94057))),
+            child: const Text('Save', style: TextStyle(color: Color(0xFF0A84FF), fontWeight: FontWeight.bold)),
           ),
         ],
       ),

@@ -25,15 +25,15 @@ class _AddSlotDialogState extends ConsumerState<AddSlotDialog> {
   late TimeOfDay _endTime;
   late int _selectedColor;
 
-  // Curated premium colors matching our dark theme
+  // Curated premium colors matching Apple's system palette
   final List<int> _colorPresets = [
-    0xFFE94057, // Crimson Pink
-    0xFF8A2387, // Purple
-    0xFFF27121, // Orange
-    0xFF1AD2D9, // Teal/Cyan
-    0xFF3B82F6, // Blue
-    0xFF10B981, // Emerald Green
-    0xFFF59E0B, // Amber/Yellow
+    0xFFFF375F, // Apple System Pink
+    0xFFBF5AF2, // Apple System Purple
+    0xFFFF9F0A, // Apple System Orange
+    0xFF64D2FF, // Apple System Cyan/Teal
+    0xFF0A84FF, // Apple System Blue
+    0xFF30D158, // Apple System Green
+    0xFF5E5CE6, // Apple System Indigo
   ];
 
   final List<String> _dayNames = [
@@ -137,14 +137,14 @@ class _AddSlotDialogState extends ConsumerState<AddSlotDialog> {
   Widget _buildTimePickerTheme(BuildContext context, Widget? child) {
     return Theme(
       data: Theme.of(context).copyWith(
-        timePickerTheme: TimePickerThemeData(
-          backgroundColor: const Color(0xFF1E1E1E),
-          dialBackgroundColor: const Color(0xFF2C2C2C),
-          dialHandColor: const Color(0xFFE94057),
+        timePickerTheme: const TimePickerThemeData(
+          backgroundColor: Color(0xFF1C1C1E),
+          dialBackgroundColor: Color(0xFF2C2C2E),
+          dialHandColor: Color(0xFF0A84FF),
           dialTextColor: Colors.white,
-          entryModeIconColor: const Color(0xFFE94057),
+          entryModeIconColor: Color(0xFF0A84FF),
           hourMinuteTextColor: Colors.white,
-          hourMinuteColor: const Color(0xFF2C2C2C),
+          hourMinuteColor: Color(0xFF2C2C2E),
         ),
       ),
       child: child!,
@@ -156,10 +156,10 @@ class _AddSlotDialogState extends ConsumerState<AddSlotDialog> {
     final isEditing = widget.slotToEdit != null;
 
     return AlertDialog(
-      backgroundColor: const Color(0xFF1E1E1E),
+      backgroundColor: const Color(0xFF1C1C1E), // Apple System Gray 6
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
-        side: const BorderSide(color: Color(0xFF2C2C2C), width: 1.5),
+        borderRadius: BorderRadius.circular(20),
+        side: const BorderSide(color: Color(0xFF2C2C2E), width: 0.8),
       ),
       titlePadding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
       contentPadding: const EdgeInsets.fromLTRB(24, 12, 24, 16),
@@ -168,16 +168,17 @@ class _AddSlotDialogState extends ConsumerState<AddSlotDialog> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            isEditing ? 'Edit Schedule Slot' : 'Add Schedule Slot',
+            isEditing ? 'Edit Class' : 'Add Class',
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
+              letterSpacing: -0.5,
             ),
           ),
           IconButton(
             onPressed: () => Navigator.of(context).pop(),
-            icon: const Icon(Icons.close_rounded, color: Colors.white54),
+            icon: const Icon(Icons.close_rounded, color: Color(0xFF8E8E93)),
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
           ),
@@ -193,34 +194,34 @@ class _AddSlotDialogState extends ConsumerState<AddSlotDialog> {
               // Subject Input
               TextFormField(
                 controller: _subjectController,
-                style: const TextStyle(color: Colors.white),
-                decoration: _inputDecoration('Subject / Class Name', Icons.book_outlined),
+                style: const TextStyle(color: Colors.white, fontSize: 15),
+                decoration: _inputDecoration('Subject Name', Icons.book_outlined),
                 validator: (val) => val == null || val.trim().isEmpty ? 'Please enter subject name' : null,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 14),
 
               // Room Input
               TextFormField(
                 controller: _roomController,
-                style: const TextStyle(color: Colors.white),
-                decoration: _inputDecoration('Room / Location (e.g. Room 302)', Icons.location_on_outlined),
+                style: const TextStyle(color: Colors.white, fontSize: 15),
+                decoration: _inputDecoration('Room / Location', Icons.location_on_outlined),
                 validator: (val) => val == null || val.trim().isEmpty ? 'Please enter room or location' : null,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 14),
 
               // Teacher Input
               TextFormField(
                 controller: _teacherController,
-                style: const TextStyle(color: Colors.white),
-                decoration: _inputDecoration('Teacher / Professor', Icons.person_outline),
+                style: const TextStyle(color: Colors.white, fontSize: 15),
+                decoration: _inputDecoration('Teacher (Optional)', Icons.person_outline),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 14),
 
               // Day Select Dropdown
               DropdownButtonFormField<int>(
                 initialValue: _selectedDay,
-                dropdownColor: const Color(0xFF2C2C2C),
-                style: const TextStyle(color: Colors.white),
+                dropdownColor: const Color(0xFF1C1C1E), // Apple System Gray 6
+                style: const TextStyle(color: Colors.white, fontSize: 15),
                 decoration: _inputDecoration('Day of Week', Icons.calendar_today_outlined),
                 items: List.generate(7, (idx) {
                   return DropdownMenuItem(
@@ -236,7 +237,7 @@ class _AddSlotDialogState extends ConsumerState<AddSlotDialog> {
                   }
                 },
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
 
               // Time Selectors
               Row(
@@ -244,25 +245,24 @@ class _AddSlotDialogState extends ConsumerState<AddSlotDialog> {
                   Expanded(
                     child: InkWell(
                       onTap: () => _selectStartTime(context),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(10),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF2C2C2C),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xFF3E3E3E)),
+                          color: const Color(0xFF2C2C2E), // Apple System Gray 5
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
                               'Start Time',
-                              style: TextStyle(color: Colors.white54, fontSize: 11),
+                              style: TextStyle(color: Color(0xFF8E8E93), fontSize: 10, fontWeight: FontWeight.w500),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               _formatTo12Hour(_startTime),
-                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
                             ),
                           ],
                         ),
@@ -273,25 +273,24 @@ class _AddSlotDialogState extends ConsumerState<AddSlotDialog> {
                   Expanded(
                     child: InkWell(
                       onTap: () => _selectEndTime(context),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(10),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF2C2C2C),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xFF3E3E3E)),
+                          color: const Color(0xFF2C2C2E), // Apple System Gray 5
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
                               'End Time',
-                              style: TextStyle(color: Colors.white54, fontSize: 11),
+                              style: TextStyle(color: Color(0xFF8E8E93), fontSize: 10, fontWeight: FontWeight.w500),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               _formatTo12Hour(_endTime),
-                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
                             ),
                           ],
                         ),
@@ -300,12 +299,12 @@ class _AddSlotDialogState extends ConsumerState<AddSlotDialog> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
 
               // Color Presets Select
               const Text(
-                'Color Theme',
-                style: TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.w600),
+                'Theme Color',
+                style: TextStyle(color: Color(0xFF8E8E93), fontSize: 12, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 8),
               SizedBox(
@@ -320,20 +319,19 @@ class _AddSlotDialogState extends ConsumerState<AddSlotDialog> {
                       onTap: () => setState(() => _selectedColor = colorVal),
                       child: Container(
                         margin: const EdgeInsets.only(right: 10),
-                        width: 36,
-                        height: 36,
+                        width: 32,
+                        height: 32,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Color(colorVal),
                           border: isSelected
-                              ? Border.all(color: Colors.white, width: 3)
+                              ? Border.all(color: Colors.white, width: 2)
                               : Border.all(color: Colors.transparent),
                           boxShadow: isSelected
                               ? [
                                   BoxShadow(
-                                    color: Color(colorVal).withValues(alpha: 0.5),
-                                    blurRadius: 8,
-                                    spreadRadius: 1,
+                                    color: Color(colorVal).withValues(alpha: 0.4),
+                                    blurRadius: 6,
                                   )
                                 ]
                               : [],
@@ -343,13 +341,13 @@ class _AddSlotDialogState extends ConsumerState<AddSlotDialog> {
                   },
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 14),
 
               // Notes Input
               TextFormField(
                 controller: _notesController,
                 maxLines: 2,
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white, fontSize: 14),
                 decoration: _inputDecoration('Notes (Optional)', Icons.notes_outlined),
               ),
             ],
@@ -359,19 +357,20 @@ class _AddSlotDialogState extends ConsumerState<AddSlotDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel', style: TextStyle(color: Color(0xFFB0B0B0))),
+          child: const Text('Cancel', style: TextStyle(color: Color(0xFF8E8E93), fontWeight: FontWeight.w500)),
         ),
         ElevatedButton(
           onPressed: _saveSlot,
           style: ElevatedButton.styleFrom(
             backgroundColor: Color(_selectedColor),
+            elevation: 0,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(10),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           ),
           child: Text(
-            isEditing ? 'Save Changes' : 'Add Class',
+            isEditing ? 'Save' : 'Add',
             style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
@@ -382,25 +381,25 @@ class _AddSlotDialogState extends ConsumerState<AddSlotDialog> {
   InputDecoration _inputDecoration(String label, IconData icon) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(color: Colors.white54, fontSize: 13),
-      prefixIcon: Icon(icon, color: const Color(0xFFE94057), size: 20),
+      labelStyle: const TextStyle(color: Color(0xFF8E8E93), fontSize: 13),
+      prefixIcon: Icon(icon, color: const Color(0xFF8E8E93), size: 18),
       filled: true,
-      fillColor: const Color(0xFF2C2C2C),
+      fillColor: const Color(0xFF2C2C2E), // Apple System Gray 5
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFF3E3E3E)),
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Colors.transparent),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFFE94057), width: 1.5),
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Color(0xFF0A84FF), width: 1.2),
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Color(0xFFFF453A), width: 1.2),
       ),
       focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Color(0xFFFF453A), width: 1.2),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
     );
