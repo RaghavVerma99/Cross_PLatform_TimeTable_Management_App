@@ -10,7 +10,6 @@ TaskFlow is a production-grade, minimalist task and schedule management client b
 - **Framework**: `Flutter SDK (>=3.0.0)` — Cross-platform rendering engine.
 - **State Management**: `flutter_riverpod (v2.x)` — Decoupled unidirectional state-notifier pattern with reactive filtering providers.
 - **Database/Caching**: `hive_flutter (v1.x)` — Lightweight, zero-dependency NoSQL key-value store syncing binary payloads directly to disk.
-- **Design Paradigm**: Cupertino OLED Dark theme (`0xFF000000` backing, `0xFF1C1C1E` cards, `0xFF0A84FF` System Blue primary accent).
 
 ---
 
